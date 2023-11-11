@@ -10,13 +10,13 @@ Add MessagePack Support to your FastEndpoints.
 
 Probably, **but you must be using .NET 8.0**. Why? Because AcceptsMetadata wasn't public before. I could probably work around it, but it took long enough to get working as is.
 
-If you're accepting MessagePack requests, this library has to adjust the endpoint registration. It's hacky as FE doesn't support `[Consumes(..)]` properly yet. If you're doing anything non-standard, there's a chance it won't work.
+If you're accepting MessagePack requests globally, this library has to adjust the endpoint registration. It's a little hacky as it overrides all endpoints to allow the new content types. If you're doing anything non-standard, there's a chance it won't work.
 
 ## Usage
 
 Add `Rudi.Dev.FastEndpoints.MessagePack` from NuGet.
 
-To add support for input bindings, you need to call `.AddMessagePackBinding()` before `.AddFastEndpoints()`, and `.UseEndpointsWithMessagePack()` *after* `.UseFastEndpoints()`.
+To add support for input bindings globally, you need to call `.AddMessagePackBinding()` before `.AddFastEndpoints()`, and `.UseEndpointsWithMessagePack()` *after* `.UseFastEndpoints()`.
 
 For example:
 ```csharp
@@ -27,6 +27,17 @@ builder.Services.AddFastEndpoints();
 
 app.UseFastEndpoints();
 app.UseEndpointsWithMessagePack();
+```
+
+To enable support on a per-endpoint basis instead, don't call `UseEndpointsWithMessagePack()`. Instead, configure your endpoint as follows:
+
+```csharp
+public override void Configure()
+{
+    Description(o => o.Accepts<ClessMsgPackResp>("application/x-msgpack"));
+    
+    // ..
+}
 ```
 
 To receive content at your endpoint, you need to set the `Content-Type` header of the request to `application/msgpack`, `application/x-msgpack` or `application/vnd-msgpack`. If you're using this, you're likely looking for performance, so use `application/msgpack` where possible as it will short-circuit quicker and save you approximately 4 attoseconds.
@@ -61,6 +72,13 @@ builder.AddMessagePackBinding(o =>
             .WithCompression(MessagePackCompression.Lz4BlockArray);
     });
 ```
+
+If you need to change the response header (for example for compatibility with another library that only reads `application/x-msgpack`), you can do this with:
+
+```csharp
+builder.AddMessagePackBinding(o => o.DefaultResponseHeader = MessagePackConstants.XContentType);
+```
+
 
 ## Recommendations
 
