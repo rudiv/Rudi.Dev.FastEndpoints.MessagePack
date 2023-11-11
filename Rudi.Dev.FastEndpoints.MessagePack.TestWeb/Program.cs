@@ -10,7 +10,11 @@ var app = builder.Build();
 
 if (builder.Environment.IsEnvironment("Global"))
 {
-    app.UseFastEndpoints(o => o.Endpoints.Configurator = ep => ep.ConfigureInboundMessagePack());
+    app.UseFastEndpoints(o =>
+    {
+        o.Serializer.ResponseSerializer = FastEndpointsResponseSerializer.MessagePack;
+        o.Endpoints.Configurator = ep => ep.ConfigureInboundMessagePack();
+    });
 }
 else
 {

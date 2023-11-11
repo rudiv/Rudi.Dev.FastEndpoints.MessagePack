@@ -42,12 +42,17 @@ public static class ServiceCollectionExtensions
     
     public static EndpointDefinition ConfigureInboundMessagePack(this EndpointDefinition endpointDefinition)
     {
-        endpointDefinition.Description(o =>
-            o.Accepts(
-                endpointDefinition.ReqDtoType,
-                MessagePackConstants.ContentType,
-                MessagePackConstants.XContentType,
-                MessagePackConstants.VndContentType));
+        if (endpointDefinition.ReqDtoType != typeof(EmptyRequest) &&
+            endpointDefinition.ReqDtoType != typeof(object))
+        {
+            endpointDefinition.Description(o =>
+                o.Accepts(
+                    endpointDefinition.ReqDtoType,
+                    MessagePackConstants.ContentType,
+                    MessagePackConstants.XContentType,
+                    MessagePackConstants.VndContentType));
+        }
+
         return endpointDefinition;
     }
 

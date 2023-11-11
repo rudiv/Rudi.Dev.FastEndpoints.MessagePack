@@ -2,11 +2,11 @@ using FastEndpoints;
 
 namespace Rudi.Dev.FastEndpoints.MessagePack.TestWeb.Endpoints;
 
-public class MessagePackOutputEndpoint : EndpointWithoutRequest<MessagePackOutputResponse>
+public class MessagePackVariedOutputEndpoint : EndpointWithoutRequest<MessagePackOutputResponse>
 {
     public override void Configure()
     {
-        Get("/mp-output");
+        Get("/vary-output");
         AllowAnonymous();
     }
 
@@ -16,6 +16,6 @@ public class MessagePackOutputEndpoint : EndpointWithoutRequest<MessagePackOutpu
         {
             Test = "Hello World!"
         };
-        await this.SendAsMsgPackAsync(response, cancellation: ct);
+        await this.SendWithMsgPackAsync(response, cancellation: ct);
     }
 }
