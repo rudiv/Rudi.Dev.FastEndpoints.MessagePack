@@ -114,6 +114,8 @@ Everything, I think. If you think of anything, open up an issue / PR.
 
 Make sure you have called `UseEndpointsWithMessagePack()` **after** `UseFastEndpoints()`, otherwise it can't tell ASP.NET to accept the content types required.
 
+Or wire the endpoint up manually as described above on a per-endpoint basis.
+
 ### I'm still getting JSON in my responses
 
 Are you using `SendWithMsgPackAsync(..)`? If so, make sure you have `Accept: application/msgpack` in your request headers. Or use `SendAsMsgPackAsync(..)` to force it.
