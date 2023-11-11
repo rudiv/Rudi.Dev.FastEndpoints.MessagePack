@@ -2,14 +2,16 @@
 using System.Reflection;
 using FastEndpoints;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Metadata;
 using Microsoft.AspNetCore.Routing;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Rudi.Dev.FastEndpoints.MessagePack.Internal;
 
 namespace Rudi.Dev.FastEndpoints.MessagePack;
 
-public static class StartupExtensions
+public static class ServiceCollectionExtensions
 {
     /// <summary>
     /// Adds MessagePack support to the FastEndpoints application.
@@ -23,21 +25,33 @@ public static class StartupExtensions
     /// </example>
     /// <param name="configure">Action to configure the binder.</param>
     /// <returns>Service Collection.</returns>
-    public static WebApplicationBuilder AddMessagePackBinding(this WebApplicationBuilder app, Action<MessagePackOptions>? configure = null)
+    public static IServiceCollection AddMessagePackBinding(this IServiceCollection services, Action<MessagePackOptions>? configure = null)
     {
         var options = new MessagePackOptions();
         configure?.Invoke(options);
 
-        app.Services.TryAddSingleton<MessagePackOptions>(options);
+        services.TryAddSingleton<MessagePackOptions>(options);
         
         if (options.AddInputBinder)
         {
-            app.Services.TryAddSingleton(typeof(IRequestBinder<>), typeof(MessagePackRequestBinder<>));
+            services.TryAddSingleton(typeof(IRequestBinder<>), typeof(MessagePackRequestBinder<>));
         }
 
-        return app;
+        return services;
+    }
+    
+    public static EndpointDefinition ConfigureInboundMessagePack(this EndpointDefinition endpointDefinition)
+    {
+        endpointDefinition.Description(o =>
+            o.Accepts(
+                endpointDefinition.ReqDtoType,
+                MessagePackConstants.ContentType,
+                MessagePackConstants.XContentType,
+                MessagePackConstants.VndContentType));
+        return endpointDefinition;
     }
 
+    /*
     /// <summary>
     /// Remaps the endpoints to accept inbound MessagePack.
     ///
@@ -71,5 +85,5 @@ public static class StartupExtensions
             })));
         }
         return builder;
-    }
+    }*/
 }

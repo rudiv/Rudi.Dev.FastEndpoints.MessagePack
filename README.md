@@ -8,15 +8,13 @@ Add MessagePack Support to your FastEndpoints.
 
 ## Will it work with any FE project
 
-Probably, **but you must be using .NET 8.0**. Why? Because AcceptsMetadata wasn't public before. I could probably work around it, but it took long enough to get working as is.
-
-If you're accepting MessagePack requests globally, this library has to adjust the endpoint registration. It's a little hacky as it overrides all endpoints to allow the new content types. If you're doing anything non-standard, there's a chance it won't work.
+Yup, most likely.
 
 ## Usage
 
 Add `Rudi.Dev.FastEndpoints.MessagePack` from NuGet.
 
-To add support for input bindings globally, you need to call `.AddMessagePackBinding()` before `.AddFastEndpoints()`, and `.UseEndpointsWithMessagePack()` *after* `.UseFastEndpoints()`.
+To add support for input bindings globally, you need to call `.AddMessagePackBinding()` before `.AddFastEndpoints()`, and `.ConfigureInboundMessagePack()` to a global configurator within FastEndpoints.
 
 For example:
 ```csharp
@@ -25,11 +23,12 @@ builder.Services.AddFastEndpoints();
 
 // ...
 
-app.UseFastEndpoints();
-app.UseEndpointsWithMessagePack();
+app.UseFastEndpoints(c => {
+    c.Endpoints.Configurator = ep => ep.ConfigureInboundMessagePack();
+});
 ```
 
-To enable support on a per-endpoint basis instead, don't call `UseEndpointsWithMessagePack()`. Instead, configure your endpoint as follows:
+To enable support on a per-endpoint basis instead, don't setup the global configurator. Instead, configure your endpoint as follows:
 
 ```csharp
 public override void Configure()
@@ -112,7 +111,7 @@ Everything, I think. If you think of anything, open up an issue / PR.
 
 ### I'm getting a 415 Unsupported Media Type
 
-Make sure you have called `UseEndpointsWithMessagePack()` **after** `UseFastEndpoints()`, otherwise it can't tell ASP.NET to accept the content types required.
+Make sure you have set up the configurator correctly, like `c.Endpoints.Configurator = ep => ep.ConfigureInboundMessagePack();`.
 
 Or wire the endpoint up manually as described above on a per-endpoint basis.
 
