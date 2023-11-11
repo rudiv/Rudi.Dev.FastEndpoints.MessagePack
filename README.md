@@ -34,7 +34,7 @@ To enable support on a per-endpoint basis instead, don't call `UseEndpointsWithM
 ```csharp
 public override void Configure()
 {
-    Description(o => o.Accepts<ClessMsgPackResp>("application/x-msgpack"));
+    Description(o => o.Accepts<MyRequestObject>("application/x-msgpack"));
     
     // ..
 }
