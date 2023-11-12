@@ -1,5 +1,4 @@
 using FastEndpoints;
-using Rudi.Dev.FastEndpoints.MessagePack.Internal;
 
 namespace Rudi.Dev.FastEndpoints.MessagePack.TestWeb.Endpoints;
 

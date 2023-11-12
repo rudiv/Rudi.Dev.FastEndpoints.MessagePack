@@ -1,6 +1,5 @@
 using MessagePack;
 using MessagePack.Resolvers;
-using Rudi.Dev.FastEndpoints.MessagePack.Internal;
 
 namespace Rudi.Dev.FastEndpoints.MessagePack;
 

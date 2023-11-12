@@ -1,10 +1,5 @@
-﻿using System.Collections;
-using System.Reflection;
-using FastEndpoints;
-using Microsoft.AspNetCore.Builder;
+﻿using FastEndpoints;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.Metadata;
-using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Rudi.Dev.FastEndpoints.MessagePack.Internal;

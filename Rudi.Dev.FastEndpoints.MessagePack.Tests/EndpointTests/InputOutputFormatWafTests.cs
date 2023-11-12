@@ -2,7 +2,6 @@ using System.Net;
 using System.Text.Json;
 using MessagePack;
 using MessagePack.Resolvers;
-using Rudi.Dev.FastEndpoints.MessagePack.Internal;
 using Rudi.Dev.FastEndpoints.MessagePack.TestWeb.Endpoints;
 
 namespace Rudi.Dev.FastEndpoints.MessagePack.Tests.EndpointTests;

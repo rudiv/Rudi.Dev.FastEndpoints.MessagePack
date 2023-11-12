@@ -2,7 +2,6 @@ using FastEndpoints;
 using MessagePack;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Net.Http.Headers;
 using Rudi.Dev.FastEndpoints.MessagePack.Internal;
 
 namespace Rudi.Dev.FastEndpoints.MessagePack;
