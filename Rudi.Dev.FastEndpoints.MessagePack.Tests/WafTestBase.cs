@@ -17,7 +17,7 @@ public abstract class WafTestBase : IAsyncLifetime
     public WebApplicationFactory<Program> App { get; private set; }
     public HttpClient Client { get; private set; }
     
-    public async Task InitializeAsync()
+    public Task InitializeAsync()
     {
         App = new WebApplicationFactory<Program>().WithWebHostBuilder(
             b =>
@@ -26,6 +26,7 @@ public abstract class WafTestBase : IAsyncLifetime
                 b.ConfigureTestServices(ConfigureServices);
             });
         Client = App.CreateClient();
+        return Task.CompletedTask;
     }
 
     public abstract void ConfigureServices(IServiceCollection services);

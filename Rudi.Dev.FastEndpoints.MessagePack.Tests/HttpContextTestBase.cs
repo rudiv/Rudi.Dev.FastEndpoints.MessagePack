@@ -10,7 +10,7 @@ public abstract class HttpContextTestBase
     
     private readonly HttpRequestFeature httpRequestFeature = new();
     private readonly FeatureCollection featureCollection = new();
-    protected HttpContext? HttpContext;
+    protected HttpContext HttpContext;
 
     public enum HeaderType
     {
