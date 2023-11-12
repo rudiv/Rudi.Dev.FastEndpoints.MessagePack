@@ -1,20 +1,13 @@
 using System.Net;
-using System.Text.Json;
-using FastEndpoints.Testing;
 using MessagePack;
 using MessagePack.Resolvers;
 using Rudi.Dev.FastEndpoints.MessagePack.Internal;
 using Rudi.Dev.FastEndpoints.MessagePack.TestWeb.Endpoints;
-using Xunit.Abstractions;
 
 namespace Rudi.Dev.FastEndpoints.MessagePack.Tests.EndpointTests;
 
-public class PerEndpointTests : TestClass<PerEpFixture>
+public class PerEndpointWafTests : PerEndpointWafTest
 {
-    public PerEndpointTests(PerEpFixture f, ITestOutputHelper o) : base(f, o)
-    {
-    }
-
     [Fact]
     public async Task UnconfiguredEndpoint()
     {
@@ -27,7 +20,7 @@ public class PerEndpointTests : TestClass<PerEpFixture>
         var req = new HttpRequestMessage(HttpMethod.Post, "mp-input");
         req.Content = new ByteArrayContent(requestBytes);
         req.Content.Headers.Add("Content-Type", MessagePackConstants.ContentType);
-        var mp = await Fixture.Client.SendAsync(req);
+        var mp = await Client.SendAsync(req);
         Assert.Equal(HttpStatusCode.UnsupportedMediaType, mp.StatusCode);
     }
     
@@ -43,7 +36,7 @@ public class PerEndpointTests : TestClass<PerEpFixture>
         var req = new HttpRequestMessage(HttpMethod.Post, "mp-input-pe");
         req.Content = new ByteArrayContent(requestBytes);
         req.Content.Headers.Add("Content-Type", MessagePackConstants.ContentType);
-        var mp = await Fixture.Client.SendAsync(req);
+        var mp = await Client.SendAsync(req);
         Assert.Equal(HttpStatusCode.OK, mp.StatusCode);
         Assert.Equal(MessagePackConstants.ContentType, MessagePackConstants.ContentType);
         

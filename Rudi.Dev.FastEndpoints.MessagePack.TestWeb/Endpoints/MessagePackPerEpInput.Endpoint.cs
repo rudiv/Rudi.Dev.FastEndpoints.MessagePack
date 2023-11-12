@@ -9,7 +9,7 @@ public class MessagePackPerEpInputEndpoint : Endpoint<MessagePackInputRequest, M
     {
         Post("/mp-input-pe");
         AllowAnonymous();
-        //Description(o => o.Accepts<MessagePackInputRequest>(MessagePackConstants.ContentType));
+        Description(o => o.Accepts<MessagePackInputRequest>(MessagePackConstants.ContentType));
     }
 
     public override async Task HandleAsync(MessagePackInputRequest req, CancellationToken ct)

@@ -1,20 +1,13 @@
 using System.Net;
-using System.Text.Json;
-using FastEndpoints.Testing;
 using MessagePack;
 using MessagePack.Resolvers;
 using Rudi.Dev.FastEndpoints.MessagePack.Internal;
 using Rudi.Dev.FastEndpoints.MessagePack.TestWeb.Endpoints;
-using Xunit.Abstractions;
 
 namespace Rudi.Dev.FastEndpoints.MessagePack.Tests.EndpointTests;
 
-public class StandardResolverInputFormatTests : TestClass<StandardResolverFixture>
+public class StandardResolverWafInputOutputFormatTests : StandardResolverWafTest
 {
-    public StandardResolverInputFormatTests(StandardResolverFixture f, ITestOutputHelper o) : base(f, o)
-    {
-    }
-
     [Fact]
     public async Task TestInputOutput()
     {
@@ -27,12 +20,20 @@ public class StandardResolverInputFormatTests : TestClass<StandardResolverFixtur
         var req = new HttpRequestMessage(HttpMethod.Post, "mp-input-std");
         req.Content = new ByteArrayContent(requestBytes);
         req.Content.Headers.Add("Content-Type", MessagePackConstants.ContentType);
-        var mp = await Fixture.Client.SendAsync(req);
+        var mp = await Client.SendAsync(req);
         Assert.Equal(HttpStatusCode.OK, mp.StatusCode);
         Assert.Equal(MessagePackConstants.ContentType, MessagePackConstants.ContentType);
         
         var response = MessagePackSerializer.Deserialize<MessagePackStandardInputResponse>(await mp.Content.ReadAsStreamAsync(), ser);
         Assert.Equal(DateOnly.FromDateTime(DateTime.Today), response.PackedAt);
         Assert.Equal("IO Test", response.Test);
+    }
+    
+    [Fact]
+    public async Task TestOutputAsMessagePack()
+    {
+        var mp = await Client.GetByteArrayAsync("mp-output-std");
+        var response = MessagePackSerializer.Deserialize<MessagePackStandardOutputResponse>(mp, new MessagePackSerializerOptions(StandardResolver.Instance));
+        Assert.Equal("Hello World!", response.Test);
     }
 }

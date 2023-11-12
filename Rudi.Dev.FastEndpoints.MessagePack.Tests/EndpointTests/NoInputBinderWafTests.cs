@@ -1,20 +1,15 @@
 using System.Net;
 using System.Text.Json;
-using FastEndpoints.Testing;
+using FastEndpoints;
 using MessagePack;
 using MessagePack.Resolvers;
 using Rudi.Dev.FastEndpoints.MessagePack.Internal;
 using Rudi.Dev.FastEndpoints.MessagePack.TestWeb.Endpoints;
-using Xunit.Abstractions;
 
 namespace Rudi.Dev.FastEndpoints.MessagePack.Tests.EndpointTests;
 
-public class InputFormatTests : TestClass<GlobalFixture>
+public class NoInputBinderWafTests : NoInputBinderWafTest
 {
-    public InputFormatTests(GlobalFixture f, ITestOutputHelper o) : base(f, o)
-    {
-    }
-
     [Fact]
     public async Task TestInputOutput()
     {
@@ -27,12 +22,17 @@ public class InputFormatTests : TestClass<GlobalFixture>
         var req = new HttpRequestMessage(HttpMethod.Post, "mp-input");
         req.Content = new ByteArrayContent(requestBytes);
         req.Content.Headers.Add("Content-Type", MessagePackConstants.ContentType);
-        var mp = await Fixture.Client.SendAsync(req);
-        Assert.Equal(HttpStatusCode.OK, mp.StatusCode);
-        Assert.Equal(MessagePackConstants.ContentType, MessagePackConstants.ContentType);
+        var mp = await Client.SendAsync(req);
+        Assert.Equal(HttpStatusCode.BadRequest, mp.StatusCode);
+        Assert.Equal("application/problem+json", mp.Content.Headers.ContentType?.ToString());
         
-        var response = MessagePackSerializer.Deserialize<MessagePackInputResponse>(await mp.Content.ReadAsStreamAsync(), ser);
-        Assert.Equal(DateOnly.FromDateTime(DateTime.Today), response.PackedAt);
-        Assert.Equal("IO Test", response.Test);
+        var resp = JsonSerializer.Deserialize<TempErrors>(await mp.Content.ReadAsStreamAsync(), new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase});
+        Assert.Equal("test", resp.Errors.First().Key);
+        Assert.Equal("'Test' must not be empty.", resp.Errors.First().Value.First());
+    }
+
+    public class TempErrors
+    {
+        public Dictionary<string, List<string>> Errors { get; set; }
     }
 }
