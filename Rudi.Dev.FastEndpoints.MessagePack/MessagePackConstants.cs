@@ -1,6 +1,6 @@
 using Microsoft.Net.Http.Headers;
 
-namespace Rudi.Dev.FastEndpoints.MessagePack.Internal;
+namespace Rudi.Dev.FastEndpoints.MessagePack;
 
 public static class MessagePackConstants
 {
