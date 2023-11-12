@@ -22,9 +22,16 @@ jobs:
         
     - name: Restore dependencies
       run: dotnet restore
+
+    - name: Test
+      id: test
+      run: dotnet test
       
     - name: Build & Package
+      id: build
+      if: steps.test.outcome == 'success'
       run: dotnet pack -c Release --no-restore
       
     - name: Publish
+      if: steps.build.outcome == 'success'
       run: dotnet nuget push ./Rudi.Dev.FastEndpoints.MessagePack/bin/Release/*.nupkg --api-key ${{secrets.NUGET_PAT}} --skip-duplicate -s https://api.nuget.org/v3/index.json
