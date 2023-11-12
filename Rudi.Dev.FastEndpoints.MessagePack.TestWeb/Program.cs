@@ -1,6 +1,7 @@
 using System.Runtime.CompilerServices;
 using FastEndpoints;
 using Rudi.Dev.FastEndpoints.MessagePack;
+using Rudi.Dev.FastEndpoints.MessagePack.TestWeb;
 
 [assembly: InternalsVisibleTo("Rudi.Dev.FastEndpoints.MessagePack.Tests")]
 
@@ -8,7 +9,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 var app = builder.Build();
 
-if (builder.Environment.IsEnvironment("Global"))
+if (app.Services.GetService<ShouldBeGlobal>() != null)
 {
     app.UseFastEndpoints(o =>
     {

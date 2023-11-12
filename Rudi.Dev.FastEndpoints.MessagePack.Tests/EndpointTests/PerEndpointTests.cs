@@ -15,8 +15,7 @@ public class PerEndpointTests : TestClass<PerEpFixture>
     {
     }
 
-    //[Fact]
-    // TODO: Fix multiple fixtures so this runs properly
+    [Fact]
     public async Task UnconfiguredEndpoint()
     {
         var request = new MessagePackInputRequest
