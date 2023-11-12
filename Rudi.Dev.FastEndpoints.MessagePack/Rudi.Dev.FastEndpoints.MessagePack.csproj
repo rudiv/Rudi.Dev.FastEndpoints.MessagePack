@@ -9,9 +9,9 @@
         <PackageId>Rudi.Dev.FastEndpoints.MessagePack</PackageId>
         <RepositoryUrl>https://github.com/rudiv/Rudi.Dev.FastEndpoints.MessagePack</RepositoryUrl>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
-        <PackageTags>fastendpoints,typescript,ts client,generator</PackageTags>
+        <PackageTags>fastendpoints,messagepack,extension,fe,msgpack</PackageTags>
         <Description>
-            Generates a customisable, simple TypeScript client for your FastEndpoints project without the need for Swagger.
+            Adds MessagePack support to your FastEndpoints (Request &amp; Response) with minimal configuration.
         </Description>
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <MinVerMinimumMajorMinor>0.1</MinVerMinimumMajorMinor>
