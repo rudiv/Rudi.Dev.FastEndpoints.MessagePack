@@ -14,12 +14,13 @@ Yup, most likely.
 
 Add `Rudi.Dev.FastEndpoints.MessagePack` from NuGet.
 
-To add support for input bindings globally, you need to call `.AddMessagePackBinding()` before `.AddFastEndpoints()`, and `.ConfigureInboundMessagePack()` to a global configurator within FastEndpoints.
+To add support for input bindings globally, you need to call `.AddMessagePackBinding()` before `.AddFastEndpoints()`, and add `.ConfigureInboundMessagePack()` to a global configurator within FastEndpoints.
 
 For example:
 ```csharp
-builder.AddMessagePackBinding();
-builder.Services.AddFastEndpoints();
+builder.Services
+    .AddMessagePackBinding()
+    .AddFastEndpoints();
 
 // ...
 
@@ -41,7 +42,7 @@ public override void Configure()
 
 To receive content at your endpoint, you need to set the `Content-Type` header of the request to `application/msgpack`, `application/x-msgpack` or `application/vnd-msgpack`. If you're using this, you're likely looking for performance, so use `application/msgpack` where possible as it will short-circuit quicker and save you approximately 4 attoseconds.
 
-To send content from your endpoint via MessagePack, use `this.SendAsMsgPackAsync(dto)`. With content-negotiation (ie. the `Accept` header must be one of the above), use `this.SendWithMsgPackAsync(dto)`.
+To send content from your endpoint via MessagePack, use `this.SendAsMsgPackAsync(dto)`. If you prefer to use content-negotiation (ie. the `Accept` header must be one of the above), use `this.SendWithMsgPackAsync(dto)`.
 
 For example:
 ```csharp
@@ -52,7 +53,7 @@ public override Task HandleAsync(CancellationToken ct)
 }
 ```
 
-You can also override the default Response Serializer of FastEndpoints to work with content-negotiation only, as follows:
+You can also override the default Response Serializer of FastEndpoints to work with content-negotiation by default whilst you retain use of `SendAsync`, as follows:
 
 ```csharp
 // Program
