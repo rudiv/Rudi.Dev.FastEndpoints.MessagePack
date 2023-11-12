@@ -1,14 +1,13 @@
-# Rudi.Dev.FastEndpoints.MessagePack
+# FastEndpoints MessagePack Extension
 
-Add MessagePack Support to your FastEndpoints.
+Add MessagePack Support to your [FastEndpoints](https://fast-endpoints.com) with minimal configuration.
+
+This uses [MessagePack-CSharp](https://github.com/MessagePack-CSharp/MessagePack-CSharp) under the hood.
 
 ## Why
 
 - Because MessagePack
-
-## Will it work with any FE project
-
-Yup, most likely.
+- Sometimes you just want to feel like you're doing RPC when you're doing REST
 
 ## Usage
 
@@ -57,10 +56,11 @@ You can also override the default Response Serializer of FastEndpoints to work w
 
 ```csharp
 // Program
-app.UseFastEndpoints(c => c.Serializer.ResponseSerializer = FastEndpointsResponseSerializer.MessagePack);
+app.UseFastEndpoints(c =>
+    c.Serializer.ResponseSerializer = FastEndpointsResponseSerializer.MessagePack);
 
 // Endpoint
-return SendAsync(myDto); // will send as MessagePack if available in Accept header, or JSON otherwise
+return SendAsync(myDto); // will send as MessagePack if available in Accept header, or JSON
 ```
 
 To override the MessagePack serializer options, for example if you wish to enable compression, just change it in the options:
