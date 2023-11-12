@@ -4,8 +4,17 @@ using Microsoft.Extensions.Logging;
 
 namespace Rudi.Dev.FastEndpoints.MessagePack.Internal;
 
-public class MessagePackRequestBinder<TRequest>(ILogger<MessagePackRequestBinder<TRequest>> logger, MessagePackOptions options) : RequestBinder<TRequest> where TRequest : notnull, new()
+public class MessagePackRequestBinder<TRequest> : RequestBinder<TRequest> where TRequest : notnull, new()
 {
+    private readonly ILogger<MessagePackRequestBinder<TRequest>> logger;
+    private readonly MessagePackOptions options;
+
+    public MessagePackRequestBinder(ILogger<MessagePackRequestBinder<TRequest>> logger, MessagePackOptions options)
+    {
+        this.logger = logger;
+        this.options = options;
+    }
+    
     public override async ValueTask<TRequest> BindAsync(BinderContext ctx, CancellationToken cancellation)
     {
         if (ctx.HttpContext.Request.HasMsgPackContentType())
