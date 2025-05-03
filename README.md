@@ -1,3 +1,9 @@
+# This has been renamed
+
+Please use [R.FastEndpoints.MessagePack](https://github.com/rudiv/R.FastEndpoints/blob/main/src/R.FastEndpoints.MessagePack/README.md) instead.
+
+-------
+
 # FastEndpoints MessagePack Extension
 
 Add MessagePack Support to your [FastEndpoints](https://fast-endpoints.com) with minimal configuration.
